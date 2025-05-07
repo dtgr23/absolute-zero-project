@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absolute Zero</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: white;
+      overflow-x: hidden;
+      transition: filter 1s ease;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+    }
+
+    .main {
+      flex-grow: 1;
+    }
+
+    .sidebar {
+      width: 15vw;
+      min-width: 150px;
+      background-color: #f0f0f0;
+      padding: 2vw;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .temp-list {
+      padding: 5vw 6vw;
+      text-align: right;
+    }
+
+    .temp {
+      font-size: 4vw;
+      margin: 2vw 0;
+    }
+
+    .warning {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 2.5vw;
+      font-weight: bold;
+      color: red;
+      display: none;
+      animation: flicker 1s infinite;
+      z-index: 9999;
+    }
+
+    @keyframes flicker {
+      0%, 49%, 100% { opacity: 1; }
+      50%, 99% { opacity: 0; }
+    }
+
+    .frozen {
+      filter: grayscale(100%);
+    }
+  </style>
+</head>
+<body>
+
+<div class="warning" id="warningText">⚠ ABSOLUTE ZERO REACHED ⚠</div>
+
+<div class="container">
+  <div class="main">
+    <div class="temp-list" id="tempList"></div>
+  </div>
+  <div class="sidebar">
+    <p><strong>Temperature Countdown</strong></p>
+  </div>
+</div>
+
+<script>
+  const tempList = document.getElementById('tempList');
+  const warningText = document.getElementById('warningText');
+
+  for (let t = 20; t >= -273.15; t -= 0.5) {
+    const temp = document.createElement('div');
+    temp.classList.add('temp');
+    temp.textContent = `${t.toFixed(2)} °C`;
+    tempList.appendChild(temp);
+  }
+
+  let frozen = false;
+
+  window.addEventListener('scroll', () => {
+    if (frozen) return;
+
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const documentHeight = document.body.offsetHeight;
+
+    if (scrollPosition >= documentHeight - 10) {
+      frozen = true;
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('frozen');
+      warningText.style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+</html>
